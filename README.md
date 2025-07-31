@@ -5,7 +5,7 @@ This project addresses the coverage control problem for multiple unmanned aerial
 
 ## Table of Content
 1. Problem Formulation
-2. Enviroment and Algorithm Implementation
+2. Environment and Algorithm Implementation
 3. Validation and Evaluation Results
 
 
@@ -100,7 +100,106 @@ Six different learning rate configurations were evaluated over **5000 training e
 | 5               | 0.0001             | 0.001               |
 | 6               | 0.00003            | 0.0003              |
 
-![Reward Trend](IA2CC/reward/learningrate/reward_trend_learningrate.png)
-**Figure 1:** Reward trend during training under different learning rate configurations,showing how varying actor and critic learning rates impact convergence and performance.
+<img src="IA2CC/reward/learningrate/reward_trend_learningrate.png" alt="Reward Trend Learning Rate" width="600">
+<p><b>Figure 1:</b> Reward trend during training under different learning rate configurations, showing how varying actor and critic learning rates impact convergence and performance.</p>
 
 
+
+#### Entropy Coefficient
+
+The **entropy coefficient** controls the strength of entropy regularization, which encourages exploration and helps prevent premature convergence to suboptimal policies. The following entropy coefficient values were tested to analyze their effect on exploration and policy convergence:
+
+| Configuration # | Entropy Coefficient |
+|-----------------|---------------------|
+| 1               | 0.00                |
+| 2               | 0.01                |
+| 3               | 0.05                |
+| 4               | 0.10                |
+
+
+
+<img src="IA2CC/reward/entropyweight/reward_trend_entropy_weight.png" alt="Reward Trend Entropy Coefficient" width="600">
+<p><b>Figure 2:</b> Reward trend during training under different entropy weights, demonstrating 0.05 and 0.01 achieved desirable performance over 0.1 and 0.0.</p>
+
+
+
+#### Discount Factor
+
+The **discount factor** determines the extent to which future rewards are considered during return calculation and ranges between 0 and 1. The larger value corresponds to long-term rewards which align with the objective of the problem. Thus, two large values of discount factor were tested:
+
+| Configuration # | Discount Factor     |
+|-----------------|---------------------|
+| 1               | 0.900               |
+| 2               | 0.999               |
+
+
+
+<img src="IA2CC/reward/discountfactor/reward_trend_gamma.png" alt="Reward Trend Discount Factor" width="600">
+<p><b>Figure 3:</b> Reward trend during training with different discount factors.<br>
+While both settings exhibit stable learning behavior, a discount factor of 0.999 promotes longer-term planning and fosters earlier cooperation among the UAVs.</p>
+
+
+
+### Reward Function Validation
+
+The reward function consists of three main components:  
+- **Total Area Gained** (positive reward)  
+- **Overlap Penalty** (negative reward)  
+- **Energy Penalty** (negative reward)  
+
+To analyze the impact of the energy constraint, two controlled experiments were conducted:  
+1. With a high energy penalty weight in the reward function  
+2. Without any energy penalty (energy weight set to zero)  
+
+This comparison highlights how incorporating energy considerations influences agent behavior and overall performance.
+
+
+| Metric                         | Configuration 1 | Configuration 2 |
+|--------------------------------|-----------------|-----------------|
+| Average Energy                 | 1347.36         | 1687.24         |
+| Standard Deviation of Energy   | 27.15           | 13.98           |
+| Average Coverage (%)           | 98.20           | 98.92           |
+| Standard Deviation of Coverage | 1.80            | 1.32            |
+| Highest Energy                 | 1416.00         | 1726.00         |
+| Lowest Energy                  | 1286.00         | 1650.00         |
+
+
+The results indicate that without the energy constraint, UAVs tend to explore the environment more randomly without achieving significant improvements in area coverage.
+In contrast, incorporating an energy penalty encourages more efficient movement patterns that balance energy consumption while maintaining a nearly identical average coverage rate.
+
+
+### Generalization Testing
+
+Configuration 1 and Configuration 2 from the Reward Function Validation section were evaluated on 50 unseen random seeds, achieving coverage rates of 97% and 99%, respectively.
+
+However, when tested on an unfamiliar environment (a larger 50×50 grid), both configurations only achieved approximately 50% coverage, indicating that the models tend to overfit to the original training environment (30×30 grid) and fail to generalize effectively to larger or different environments.
+
+Possible reasons for this limited generalization include:
+
+- Limited domain randomization during training, restricting exposure to diverse scenarios
+
+- Architectural design of the centralized critic, which may constrain the model’s ability to dynamically adapt to varying environments
+
+### Illustration
+<video width="600" controls>
+  <source src="IA2CC/evaluate_30x30/seed_42/rewardweight/config1/trajectory.mp4" type="video/mp4">
+  Your browser does not support the video tag.
+</video>
+<p style="">
+  Training demonstration video showing UAVs coordination in action (30x30 grid).
+</p>
+
+
+<video width="600" controls>
+  <source src="IA2CC/evaluate_50x50/evaluate(150 steps)/seed_0/rewardweight/config1/trajectory.mp4" type="video/mp4">
+  Your browser does not support the video tag.
+</video>
+<p style="">
+  Training demonstration video showing UAVs coordination in action (50x50 grid).
+</p>
+
+
+### Acknowledgement
+
+I would like to express my sincere gratitude to my supervisor, Dr. Leonardo Stella, for his continuous support and guidance throughout this project.  
+Additionally, I extend my thanks to Alan Binu for his valuable assistance and insightful suggestions that helped me take the necessary steps toward successful completion.

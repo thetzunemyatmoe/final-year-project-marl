@@ -180,24 +180,6 @@ Possible reasons for this limited generalization include:
 
 - Architectural design of the centralized critic, which may constrain the model’s ability to dynamically adapt to varying environments
 
-### Illustration
-<video width="600" controls>
-  <source src="IA2CC/evaluate_30x30/seed_42/rewardweight/config1/trajectory.mp4" type="video/mp4">
-  Your browser does not support the video tag.
-</video>
-<p style="">
-  Training demonstration video showing UAVs coordination in action (30x30 grid).
-</p>
-
-
-<video width="600" controls>
-  <source src="IA2CC/evaluate_50x50/evaluate(150 steps)/seed_0/rewardweight/config1/trajectory.mp4" type="video/mp4">
-  Your browser does not support the video tag.
-</video>
-<p style="">
-  Training demonstration video showing UAVs coordination in action (50x50 grid).
-</p>
-
 
 ### Acknowledgement
 
